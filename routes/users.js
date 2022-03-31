@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
 // create user
 router.post('/', (req, res) => {
     let user = req.body;
-    let missingArguments = []
+    let missingArguments = [];
     if (typeof user.username === 'undefined') {
         missingArguments.push("username");
     }
@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
     }
 
     if (missingArguments.length !== 0) {
-        res.send(`Missing arguments : ${missingArguments}`)
+        res.send(`Missing arguments : ${missingArguments}`);
     } else {
         users.push(user);
         res.send("User added");
@@ -59,6 +59,11 @@ router.delete('/', (req, res) => {
     let index = users.findIndex(user => user.username === user_send.username);
     users.splice(index, 1);
     res.send("User deleted");
+});
+
+// edit user
+router.put('/', (req, res) => {
+    res.send('WIP');
 });
 
 export default router;
