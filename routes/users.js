@@ -56,9 +56,26 @@ router.post('/', (req, res) => {
 // delete user
 router.delete('/', (req, res) => {
     let user_send = req.body;
-    let index = users.findIndex(user => user.username === user_send.username);
-    users.splice(index, 1);
-    res.send("User deleted");
+    let param = null;
+
+    if (typeof user_send.username !== 'undefined') {
+        param = 'username';
+    } else if (typeof user_send.mail !== 'undefined') {
+        param = 'mail';
+    } else if (typeof user_send.age !== 'undefined') {
+        param = 'age';
+    } else if (typeof user_send.active !== 'undefined') {
+        param = 'active';
+    }
+
+    if (param) {
+        let index = users.findIndex(user => user.param === user_send.param);
+        users.splice(index, 1);
+        res.send("User deleted");
+    } else {
+        res.send("Unknown param");
+    }
+
 });
 
 // edit user
