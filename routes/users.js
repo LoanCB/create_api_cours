@@ -23,14 +23,24 @@ let users = [
     }
 ];
 
+// get all users
 router.get('/', (req, res) => {
     res.send(users);
 });
 
+// create an user
 router.post('/', (req, res) => {
     let user = req.body;
     users.push(user);
     res.send("User added");
+});
+
+// delete an user
+router.delete('/', (req, res) => {
+    let user_send = req.body;
+    let index = users.findIndex(user => user.username === user_send.username);
+    users.splice(index, 1);
+    res.send("User deleted");
 });
 
 export default router;
