@@ -32,6 +32,21 @@ router.get('/', (req, res) => {
     res.send(users);
 });
 
+// get a user
+router.get('/username', (req, res) => {
+    let params = req.query;
+    if (params.username) {
+        let index = users.findIndex(user => user.username === params.username);
+        if (index === -1) {
+            res.send(`No username named ${params.username}`);
+        } else {
+            res.send(users[index]);
+        }
+    } else {
+        res.send("Need an username on parameters");
+    }
+});
+
 // create user
 router.post('/', async (req, res) => {
     let user = req.body;
@@ -68,7 +83,7 @@ router.post('/', async (req, res) => {
 });
 
 // delete user
-router.delete('/', (req, res) => {
+router.delete('/username/', (req, res) => {
     let params = req.query;
     if (params.username) {
         let index = users.findIndex(user => user.username === params.username);
