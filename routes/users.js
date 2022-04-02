@@ -1,46 +1,24 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import { arrUsers } from "../data.js";
+import { arrArticles } from "../data.js";
 
 const router = express.Router();
 
-let users = [
-    {
-        "username": "Loan",
-        "mail": "loanbillonnet@gmail.com",
-        "age": 19,
-        "active": true,
-        "password": "$2a$10$C8ROqTCxQiZVClGyxDXOteF575FFeL//vgTMgzDXoWx/r0nUV6A7S"
-    },
-    {
-        "username": "Romain",
-        "mail": "romain.gojard@gmail.com",
-        "age": 21,
-        "active": true,
-        "password": "$2a$10$Om/Z9FCUp7MxYVj29werI.bxBkhiIVgswwHWRp.DGccJwYYMQtslS"
-    },
-    {
-        "username": "Noé",
-        "mail": "noe@macoley.fr",
-        "age": 20,
-        "active": false,
-        "password": "$2a$10$WQQVin5qC/Jld.A76Ei.gueHzdpPeonKu8oaLyzp21ma41PmgTlSm"
-    }
-];
-
 // get all users
 router.get('/', (req, res) => {
-    res.send(users);
+    res.send(arrUsers);
 });
 
 // get a user
 router.get('/username', (req, res) => {
     let params = req.query;
     if (params.username) {
-        let index = users.findIndex(user => user.username === params.username);
+        let index = arrUsers.findIndex(user => user.username === params.username);
         if (index === -1) {
             res.send(`No username named ${params.username}`);
         } else {
-            res.send(users[index]);
+            res.send(arrUsers[index]);
         }
     } else {
         res.send("Need an username on parameters");
@@ -49,33 +27,33 @@ router.get('/username', (req, res) => {
 
 // create user
 router.post('/', async (req, res) => {
-    let user = req.body;
+    let params = req.query;
     let missingArguments = [];
-    if (typeof user.username === 'undefined') {
+    if (typeof params.username === 'undefined') {
         missingArguments.push("username");
     }
-    if (typeof user.mail === 'undefined') {
+    if (typeof params.mail === 'undefined') {
         missingArguments.push("mail");
     }
-    if (typeof user.age === 'undefined') {
+    if (typeof params.age === 'undefined') {
         missingArguments.push("age");
     }
-    if (typeof user.active === 'undefined') {
+    if (typeof params.active === 'undefined') {
         missingArguments.push("active");
     }
-    if (typeof user.password === 'undefined') {
+    if (typeof params.password === 'undefined') {
         missingArguments.push("password");
     }
 
     if (missingArguments.length !== 0) {
         res.send(`Missing arguments : ${missingArguments}`);
     } else {
-        bcrypt.hash(user.password, 10, function(err, hash) {
+        bcrypt.hash(params.password, 10, function(err, hash) {
             if (err) {
                 res.send("Internal server error : hash failed");
             } else {
-                user.password = hash;
-                users.push(user);
+                params.password = hash;
+                arrUsers.push(params);
                 res.send("User added");
             }
         });
@@ -86,11 +64,11 @@ router.post('/', async (req, res) => {
 router.delete('/username/', (req, res) => {
     let params = req.query;
     if (params.username) {
-        let index = users.findIndex(user => user.username === params.username);
+        let index = arrUsers.findIndex(user => user.username === params.username);
         if (index === -1) {
             res.send(`No username named ${params.username}`);
         } else {
-            users.splice(index, 1);
+            arrUsers.splice(index, 1);
             res.send("User deleted");
         }
     } else {
@@ -142,4 +120,3 @@ router.put('/', (req, res) => {
 // });
 
 export default router;
-export const arrUsers = users;
