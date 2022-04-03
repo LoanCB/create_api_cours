@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 // get a user
-router.get('/username', (req, res) => {
+router.get('/username/', (req, res) => {
     let params = req.query;
     if (params.username) {
         let index = arrUsers.findIndex(user => user.username === params.username);
@@ -77,8 +77,44 @@ router.delete('/username/', (req, res) => {
 });
 
 // edit user
-router.put('/', (req, res) => {
-    res.send('WIP');
+router.patch('/username/', (req, res) => {
+    let params = req.query;
+    if (typeof params.username === 'undefined' && typeof params.mail === 'undefined' && typeof params.age === 'undefined' && typeof params.active === 'undefined' && typeof params.password === 'undefined') {
+        res.send("Need a parameter for update a user");
+    } else {
+        if (params.user) {
+            let index = arrUsers.findIndex(user => user.username === params.user);
+            if (index === -1) {
+                res.send(`No user named ${params.user}`);
+            } else {
+                if (params.username) {
+                    arrUsers[index].username = params.username;
+                }
+                if (params.mail) {
+                    arrUsers[index].mail = params.mail;
+                }
+                if (params.age) {
+                    arrUsers[index].age = params.age;
+                }
+                if (params.active) {
+                    arrUsers[index].active = params.active;
+                }
+                if (params.password) {
+                    bcrypt.hash(params.password, 10, function(err, hash) {
+                        if (err) {
+                            res.send("Internal server error : hash failed");
+                        } else {
+                            params.password = hash;
+                            arrUsers[index].password = params.password;
+                        }
+                    });
+                }
+                res.send(`User ${params.user} updated`);
+            }
+        } else {
+            res.send("Need to get user for edit it");
+        }
+    }
 });
 
 // TODO login user not working
@@ -120,7 +156,7 @@ router.put('/', (req, res) => {
 // });
 
 // Get articles of a user
-router.get('/username/articles', (req, res) => {
+router.get('/username/articles/', (req, res) => {
     let params = req.query;
     if (params.username) {
         let index = [];
