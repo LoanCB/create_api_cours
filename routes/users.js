@@ -117,43 +117,37 @@ router.patch('/username/', (req, res) => {
     }
 });
 
-// TODO login user not working
-// router.post('/login', async (req, res) => {
-//     let user_send = req.body;
-//     async function checkUser(username, password) {
-//         for (let user = 0; user < users.length; user++) {
-//             const user_match = await bcrypt.compare(password, users.password);
-//         }
-//         if(user_match) {
-//             //login
-//         }
-//
-//         //...
-//     }
-//
-//     if (typeof user_send.username === 'undefined' || typeof user_send.password === 'undefined') {
-//         res.send("Need an username and a password to log in !");
-//     } else {
-//         let success = false;
-//         for (let count = 0; count < users.length; count++) {
-//             bcrypt.compare(user_send.password, users[count].password, function(err, result) {
-//                 if (result) {
-//                     let filter = users.filter(element =>
-//                         element.username === user_send.username && element.password === users[count].password
-//                     );
-//                     if (filter.length > 0) {
-//                         res.send(`You are logged with ${filter[0].username}`);
-//                         success = true;
-//                         console.log(success);
-//                     }
-//                 }
-//             });
-//         }
-//         if (!success) {
-//             res.send("Invalid username or password");
-//         }
-//     }
-// });
+// login
+router.post('/login/', (req, res) => {
+    let params = req.query;
+    if (typeof params.username === 'undefined' || typeof params.password === 'undefined') {
+        res.send("Need an username and a password to log in !");
+    } else {
+        let done = true;
+        let index = arrUsers.findIndex(user => user.username === params.username);
+        if (index === -1) {
+            done = false;
+        } else {
+            bcrypt.compare(params.password, arrUsers[index].password, function(err, result) {
+                if (err) {
+                    res.send("Internal server error : hash failed");
+                    done = null;
+                } else {
+                    if (result) {
+                        // TODO authentication token
+                    } else {
+                        done = false;
+                    }
+                }
+                if (done) {
+                    res.send(`You are now connected on ${params.username}`);
+                } else if (done === false) {
+                    res.send("Wrong username or password");
+                }
+            });
+        }
+    }
+});
 
 // Get articles of a user
 router.get('/username/articles/', (req, res) => {
