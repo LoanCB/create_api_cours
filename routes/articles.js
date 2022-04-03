@@ -75,4 +75,47 @@ router.delete('/title', (req, res) => {
     }
 });
 
+// edit an article
+router.patch('/title/', (req, res) => {
+    let params = req.query;
+    if (typeof params.author === 'undefined' && typeof params.title === 'undefined' && typeof params.content === 'undefined' && typeof params.published === 'undefined' && typeof params.publicationDate === 'undefined') {
+        res.send("Need a parameter for update an article");
+    } else {
+        if (params.find_title) {
+            let done = true;
+            let index = arrArticles.findIndex(article => article.title === params.find_title);
+            if (index === -1) {
+                res.send(`No article with title "${params.find_title}"`);
+            } else {
+                if (params.author) {
+                    let userIndex = arrUsers.findIndex(user => user.username === params.author);
+                    if (userIndex === -1) {
+                        res.send(`Edit failed : no username named "${params.author}"`);
+                        done = false;
+                    } else {
+                        arrArticles[index].author = arrUsers[userIndex];
+                    }
+                }
+                if (done) {
+                    if (params.title) {
+                        arrArticles[index].title = params.title;
+                    }
+                    if (params.content) {
+                        arrArticles[index].content = params.content;
+                    }
+                    if (params.published) {
+                        arrArticles[index].published = params.published;
+                    }
+                    if (params.publicationDate) {
+                        arrArticles[index].publicationDate = params.publicationDate;
+                    }
+                    res.send(`Article "${params.find_title}" updated`);
+                }
+            }
+        } else {
+            res.send("Need to get param 'find_title' to recover an article with his title");
+        }
+    }
+});
+
 export default router;

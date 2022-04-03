@@ -4,21 +4,21 @@ let users = [
         "mail": "loanbillonnet@gmail.com",
         "age": 19,
         "active": true,
-        "password": "$2a$10$C8ROqTCxQiZVClGyxDXOteF575FFeL//vgTMgzDXoWx/r0nUV6A7S"
+        "password": "$2a$10$C8ROqTCxQiZVClGyxDXOteF575FFeL//vgTMgzDXoWx/r0nUV6A7S" // adminadmin
     },
     {
         "username": "Romain",
         "mail": "romain.gojard@gmail.com",
         "age": 21,
         "active": true,
-        "password": "$2a$10$Om/Z9FCUp7MxYVj29werI.bxBkhiIVgswwHWRp.DGccJwYYMQtslS"
+        "password": "$2a$10$Om/Z9FCUp7MxYVj29werI.bxBkhiIVgswwHWRp.DGccJwYYMQtslS" // root
     },
     {
         "username": "Noé",
         "mail": "noe@macoley.fr",
         "age": 20,
         "active": false,
-        "password": "$2a$10$WQQVin5qC/Jld.A76Ei.gueHzdpPeonKu8oaLyzp21ma41PmgTlSm"
+        "password": "$2a$10$WQQVin5qC/Jld.A76Ei.gueHzdpPeonKu8oaLyzp21ma41PmgTlSm" // azerty
     }
 ];
 
