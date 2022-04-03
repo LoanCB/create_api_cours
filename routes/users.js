@@ -13,7 +13,13 @@ const router = express.Router();
 
 // get all users
 router.get('/', (req, res) => {
-    res.send(arrUsers);
+    let result = arrUsers.map(index => ({
+        "username": index["username"],
+        "mail": index["mail"],
+        "age": index["age"],
+        "active": index["active"],
+    }));
+    res.send(result);
 });
 
 // get a user
