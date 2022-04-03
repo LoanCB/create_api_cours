@@ -1,4 +1,4 @@
-let users = [
+const users = [
     {
         "username": "Loan",
         "mail": "loanbillonnet@gmail.com",
@@ -22,7 +22,7 @@ let users = [
     }
 ];
 
-let articles = [
+const articles = [
     {
         'author': users[0],
         'title': "Incroyable révélation !",
@@ -121,5 +121,8 @@ let articles = [
     },
 ];
 
+const SECRET = 'jbdz48svevsd5v1smow153a6vs5dvvsj0s2dvliul9zef21q7im';
+
 export const arrUsers = users;
 export const arrArticles = articles;
+export const JWT_SIGN_SECRET = SECRET;

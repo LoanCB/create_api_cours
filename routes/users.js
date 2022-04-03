@@ -1,8 +1,14 @@
+// Libraries
 import express from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+// Data
 import { arrUsers } from "../data.js";
 import { arrArticles } from "../data.js";
+import { JWT_SIGN_SECRET } from "../data.js";
 
+// Router
 const router = express.Router();
 
 // get all users
@@ -134,13 +140,17 @@ router.post('/login/', (req, res) => {
                     done = null;
                 } else {
                     if (result) {
-                        // TODO authentication token
+                        var token = jwt.sign(
+                            {username: params.username},
+                            JWT_SIGN_SECRET,
+                            {expiresIn: '3h'}
+                        );
                     } else {
                         done = false;
                     }
                 }
                 if (done) {
-                    res.send(`You are now connected on ${params.username}`);
+                    res.send(`You are now connected on ${params.username}\n Your token is : ${token}`);
                 } else if (done === false) {
                     res.send("Wrong username or password");
                 }

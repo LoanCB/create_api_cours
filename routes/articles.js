@@ -1,7 +1,11 @@
+// Library
 import express from "express";
+
+// Data
 import { arrUsers } from "../data.js";
 import { arrArticles } from "../data.js";
 
+// Router
 const router = express.Router();
 
 // get all articles
