@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 });
 
 // get a user
-router.get('/username/', (req, res) => {
+router.get('/username', (req, res) => {
     let params = req.query;
     if (params.username) {
         let index = arrUsers.findIndex(user => user.username === params.username);
@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
 });
 
 // delete user
-router.delete('/username/', (req, res) => {
+router.delete('/username', (req, res) => {
     let params = req.query;
     if (params.username) {
         let index = arrUsers.findIndex(user => user.username === params.username);
@@ -89,15 +89,15 @@ router.delete('/username/', (req, res) => {
 });
 
 // edit user
-router.patch('/username/', (req, res) => {
+router.patch('/username', (req, res) => {
     let params = req.query;
     if (typeof params.username === 'undefined' && typeof params.mail === 'undefined' && typeof params.age === 'undefined' && typeof params.active === 'undefined' && typeof params.password === 'undefined') {
         res.status(400).send("Need a parameter for update a user");
     } else {
-        if (params.user) {
-            let index = arrUsers.findIndex(user => user.username === params.user);
+        if (params.find_username) {
+            let index = arrUsers.findIndex(user => user.username === params.find_username);
             if (index === -1) {
-                res.status(404).send(`No user named ${params.user}`);
+                res.status(404).send(`No user named ${params.find_username}`);
             } else {
                 if (params.username) {
                     arrUsers[index].username = params.username;
@@ -121,7 +121,7 @@ router.patch('/username/', (req, res) => {
                         }
                     });
                 }
-                res.status(200).send(`User ${params.user} updated`);
+                res.status(200).send(`User ${params.find_username} updated`);
             }
         } else {
             res.status(400).send("Need to get user for edit it");
@@ -130,7 +130,7 @@ router.patch('/username/', (req, res) => {
 });
 
 // login
-router.post('/login/', (req, res) => {
+router.post('/login', (req, res) => {
     let params = req.query;
     if (typeof params.username === 'undefined' || typeof params.password === 'undefined') {
         res.status(400).send("Need an username and a password to log in !");
@@ -166,7 +166,7 @@ router.post('/login/', (req, res) => {
 });
 
 // Get articles of a user
-router.get('/username/articles/', (req, res) => {
+router.get('/username/articles', (req, res) => {
     let params = req.query;
     if (params.username) {
         let index = [];

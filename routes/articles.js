@@ -80,7 +80,7 @@ router.delete('/title', (req, res) => {
 });
 
 // edit an article
-router.patch('/title/', (req, res) => {
+router.patch('/title', (req, res) => {
     let params = req.query;
     if (typeof params.author === 'undefined' && typeof params.title === 'undefined' && typeof params.content === 'undefined' && typeof params.published === 'undefined' && typeof params.publicationDate === 'undefined') {
         res.status(400).send("Need a parameter for update an article");
