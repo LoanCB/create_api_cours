@@ -66,7 +66,7 @@ const articles = [
         'title': "Non publié",
         'content': " Cet article n'est pas publié afin de réaliser des tests",
         'published': false,
-        'publicationDate': new Date(2022, 1, 10)
+        'publicationDate': null
     },
     {
         'author': users[0],
@@ -80,7 +80,7 @@ const articles = [
         'title': "I'm a teapot !",
         'content': "Error 418",
         'published': false,
-        'publicationDate': new Date(2021, 3, 5)
+        'publicationDate': null
     },
     {
         'author': users[0],
@@ -88,7 +88,7 @@ const articles = [
         'content': "Conterminans teneret usque in Macedonis in occupatam Saracenis plagam obitum rectum magnum limes" +
             " plagam longum conterminans ut rex fluminis gentibus.",
         'published': false,
-        'publicationDate': new Date(2022, 3, 2)
+        'publicationDate': null
     },
     {
         'author': users[2],
@@ -109,7 +109,7 @@ const articles = [
             "paucis sine respiratione ulla extrusis, tenerentur minimarum adseclae veri, quique id simularunt ad " +
             "tempus, et tria milia saltatricum ne interpellata quidem cum choris totidemque remanerent magistris.",
         'published': false,
-        'publicationDate': new Date(2022, 0, 30)
+        'publicationDate': null
     },
     {
         'author': users[1],

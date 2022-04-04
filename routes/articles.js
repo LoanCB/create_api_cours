@@ -46,9 +46,6 @@ router.post('/', (req, res) => {
     if (typeof article.published === 'undefined') {
         missingArguments.push("published");
     }
-    if (typeof article.publicationDate === 'undefined') {
-        missingArguments.push("publicationDate");
-    }
 
     if (missingArguments.length !== 0) {
         res.status(400).send(`Missing arguments : ${missingArguments}`);
@@ -56,6 +53,11 @@ router.post('/', (req, res) => {
         if (index === -1) {
             res.status(404).send(`No username named ${article.author}`);
         } else {
+            if (article.published) {
+                article.publicationDate = new Date().toISOString();
+            } else {
+                article.publicationDate = null;
+            }
             article.author = arrUsers[index];
             arrArticles.push(article);
             res.status(201).send("Article added");
@@ -82,7 +84,7 @@ router.delete('/title', (req, res) => {
 // edit an article
 router.patch('/title', (req, res) => {
     let params = req.query;
-    if (typeof params.author === 'undefined' && typeof params.title === 'undefined' && typeof params.content === 'undefined' && typeof params.published === 'undefined' && typeof params.publicationDate === 'undefined') {
+    if (typeof params.author === 'undefined' && typeof params.title === 'undefined' && typeof params.content === 'undefined' && typeof params.published === 'undefined') {
         res.status(400).send("Need a parameter for update an article");
     } else {
         if (params.find_title) {
@@ -107,11 +109,13 @@ router.patch('/title', (req, res) => {
                     if (params.content) {
                         arrArticles[index].content = params.content;
                     }
-                    if (params.published) {
+                    if (params.published !== undefined) {
+                        if (params.published === 'true') {
+                            arrArticles[index].publicationDate = new Date().toISOString();
+                        } else {
+                            arrArticles[index].publicationDate = null;
+                        }
                         arrArticles[index].published = params.published;
-                    }
-                    if (params.publicationDate) {
-                        arrArticles[index].publicationDate = params.publicationDate;
                     }
                     res.status(200).send(`Article "${params.find_title}" updated`);
                 }
