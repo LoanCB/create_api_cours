@@ -10,7 +10,7 @@ const router = express.Router();
 
 // get all articles
 router.get('/', (req, res) => {
-    res.send(arrArticles);
+    res.status(200).send(arrArticles);
 });
 
 // get an article with title
@@ -19,12 +19,12 @@ router.get('/title', (req, res) => {
     if (params.title) {
         let index = arrArticles.findIndex(article => article.title === params.title);
         if (index === -1) {
-            res.send(`No article with title "${params.title}"`);
+            res.status(404).send(`No article with title "${params.title}"`);
         } else {
-            res.send(arrArticles[index]);
+            res.status(200).send(arrArticles[index]);
         }
     } else {
-        res.send("Need a title on parameters");
+        res.status(400).send("Need a title on parameters");
     }
 });
 
@@ -51,14 +51,14 @@ router.post('/', (req, res) => {
     }
 
     if (missingArguments.length !== 0) {
-        res.send(`Missing arguments : ${missingArguments}`);
+        res.status(400).send(`Missing arguments : ${missingArguments}`);
     } else {
         if (index === -1) {
-            res.send(`No username named ${article.author}`);
+            res.status(404).send(`No username named ${article.author}`);
         } else {
             article.author = arrUsers[index];
             arrArticles.push(article);
-            res.send("Article added");
+            res.status(201).send("Article added");
         }
     }
 });
@@ -69,13 +69,13 @@ router.delete('/title', (req, res) => {
     if (params.title) {
         let index = arrArticles.findIndex(article => article.title === params.title);
         if (index === -1) {
-            res.send(`No article with title "${params.title}"`);
+            res.status(404).send(`No article with title "${params.title}"`);
         } else {
             arrArticles.splice(index, 1);
-            res.send("Article deleted");
+            res.status(200).send("Article deleted");
         }
     } else {
-        res.send("Need a title on parameters");
+        res.status(400).send("Need a title on parameters");
     }
 });
 
@@ -83,18 +83,18 @@ router.delete('/title', (req, res) => {
 router.patch('/title/', (req, res) => {
     let params = req.query;
     if (typeof params.author === 'undefined' && typeof params.title === 'undefined' && typeof params.content === 'undefined' && typeof params.published === 'undefined' && typeof params.publicationDate === 'undefined') {
-        res.send("Need a parameter for update an article");
+        res.status(400).send("Need a parameter for update an article");
     } else {
         if (params.find_title) {
             let done = true;
             let index = arrArticles.findIndex(article => article.title === params.find_title);
             if (index === -1) {
-                res.send(`No article with title "${params.find_title}"`);
+                res.status(404).send(`No article with title "${params.find_title}"`);
             } else {
                 if (params.author) {
                     let userIndex = arrUsers.findIndex(user => user.username === params.author);
                     if (userIndex === -1) {
-                        res.send(`Edit failed : no username named "${params.author}"`);
+                        res.status(404).send(`Edit failed : no username named "${params.author}"`);
                         done = false;
                     } else {
                         arrArticles[index].author = arrUsers[userIndex];
@@ -113,11 +113,11 @@ router.patch('/title/', (req, res) => {
                     if (params.publicationDate) {
                         arrArticles[index].publicationDate = params.publicationDate;
                     }
-                    res.send(`Article "${params.find_title}" updated`);
+                    res.status(200).send(`Article "${params.find_title}" updated`);
                 }
             }
         } else {
-            res.send("Need to get param 'find_title' to recover an article with his title");
+            res.status(400).send("Need to get param 'find_title' to recover an article with his title");
         }
     }
 });

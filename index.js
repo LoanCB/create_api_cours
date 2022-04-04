@@ -15,10 +15,10 @@ const logger = function (req, res, next) {
                 jwt.verify(auth.replace('Bearer ', ''), JWT_SIGN_SECRET);
                 next();
             } catch (err) {
-                res.send(err.name);
+                res.status(400).send(err.name);
             }
         } else {
-            res.send("Need a bearer token to use this route. You can get it on login (refer to doc)");
+            res.status(401).send("Need a bearer token to use this route. You can get it on login (refer to doc)");
         }
     } else {
         next();

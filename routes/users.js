@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
         "age": index["age"],
         "active": index["active"],
     }));
-    res.send(result);
+    res.status(200).send(result);
 });
 
 // get a user
@@ -28,12 +28,12 @@ router.get('/username/', (req, res) => {
     if (params.username) {
         let index = arrUsers.findIndex(user => user.username === params.username);
         if (index === -1) {
-            res.send(`No username named ${params.username}`);
+            res.status(404).send(`No username named ${params.username}`);
         } else {
-            res.send(arrUsers[index]);
+            res.status(200).send(arrUsers[index]);
         }
     } else {
-        res.send("Need an username on parameters");
+        res.status(400).send("Need an username on parameters");
     }
 });
 
@@ -58,15 +58,15 @@ router.post('/', async (req, res) => {
     }
 
     if (missingArguments.length !== 0) {
-        res.send(`Missing arguments : ${missingArguments}`);
+        res.status(400).send(`Missing arguments : ${missingArguments}`);
     } else {
         bcrypt.hash(params.password, 10, function(err, hash) {
             if (err) {
-                res.send("Internal server error : hash failed");
+                res.status(500).send("Internal server error : hash failed");
             } else {
                 params.password = hash;
                 arrUsers.push(params);
-                res.send("User added");
+                res.status(201).send("User added");
             }
         });
     }
@@ -78,13 +78,13 @@ router.delete('/username/', (req, res) => {
     if (params.username) {
         let index = arrUsers.findIndex(user => user.username === params.username);
         if (index === -1) {
-            res.send(`No username named ${params.username}`);
+            res.status(404).send(`No username named ${params.username}`);
         } else {
             arrUsers.splice(index, 1);
-            res.send("User deleted");
+            res.status(200).send("User deleted");
         }
     } else {
-        res.send("Need an username on parameters");
+        res.status(400).send("Need an username on parameters");
     }
 });
 
@@ -92,12 +92,12 @@ router.delete('/username/', (req, res) => {
 router.patch('/username/', (req, res) => {
     let params = req.query;
     if (typeof params.username === 'undefined' && typeof params.mail === 'undefined' && typeof params.age === 'undefined' && typeof params.active === 'undefined' && typeof params.password === 'undefined') {
-        res.send("Need a parameter for update a user");
+        res.status(400).send("Need a parameter for update a user");
     } else {
         if (params.user) {
             let index = arrUsers.findIndex(user => user.username === params.user);
             if (index === -1) {
-                res.send(`No user named ${params.user}`);
+                res.status(404).send(`No user named ${params.user}`);
             } else {
                 if (params.username) {
                     arrUsers[index].username = params.username;
@@ -114,17 +114,17 @@ router.patch('/username/', (req, res) => {
                 if (params.password) {
                     bcrypt.hash(params.password, 10, function(err, hash) {
                         if (err) {
-                            res.send("Internal server error : hash failed");
+                            res.status(500).send("Internal server error : hash failed");
                         } else {
                             params.password = hash;
                             arrUsers[index].password = params.password;
                         }
                     });
                 }
-                res.send(`User ${params.user} updated`);
+                res.status(200).send(`User ${params.user} updated`);
             }
         } else {
-            res.send("Need to get user for edit it");
+            res.status(400).send("Need to get user for edit it");
         }
     }
 });
@@ -133,7 +133,7 @@ router.patch('/username/', (req, res) => {
 router.post('/login/', (req, res) => {
     let params = req.query;
     if (typeof params.username === 'undefined' || typeof params.password === 'undefined') {
-        res.send("Need an username and a password to log in !");
+        res.status(400).send("Need an username and a password to log in !");
     } else {
         let done = true;
         let index = arrUsers.findIndex(user => user.username === params.username);
@@ -142,7 +142,7 @@ router.post('/login/', (req, res) => {
         } else {
             bcrypt.compare(params.password, arrUsers[index].password, function(err, result) {
                 if (err) {
-                    res.send("Internal server error : hash failed");
+                    res.status(500).send("Internal server error : hash failed");
                     done = null;
                 } else {
                     if (result) {
@@ -156,9 +156,9 @@ router.post('/login/', (req, res) => {
                     }
                 }
                 if (done) {
-                    res.send(`You are now connected on ${params.username}\n Your token is : ${token}`);
+                    res.status(200).send(`You are now connected on ${params.username}\n Your token is : ${token}`);
                 } else if (done === false) {
-                    res.send("Wrong username or password");
+                    res.status(400).send("Wrong username or password");
                 }
             });
         }
@@ -176,16 +176,16 @@ router.get('/username/articles/', (req, res) => {
             }
         }
         if (index.length === 0) {
-            res.send(`No article found on user ${params.username}`);
+            res.status(404).send(`No article found on user ${params.username}`);
         } else {
             let articles = [];
             for (let count = 0; count < index.length; count++) {
                 articles.push(index[count]);
             }
-            res.send(articles);
+            res.status(200).send(articles);
         }
     } else {
-        res.send("Need an username on parameters");
+        res.status(400).send("Need an username on parameters");
     }
 });
 
