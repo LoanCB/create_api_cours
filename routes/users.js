@@ -169,19 +169,15 @@ router.post('/login', (req, res) => {
 router.get('/username/articles', (req, res) => {
     let params = req.query;
     if (params.username) {
-        let index = [];
+        let articles = [];
         for (let count = 0; count < arrArticles.length; count++) {
             if (arrArticles[count].author.username === params.username) {
-                index.push(arrArticles[count]);
+                articles.push(arrArticles[count]);
             }
         }
-        if (index.length === 0) {
+        if (articles.length === 0) {
             res.status(404).send(`No article found on user ${params.username}`);
         } else {
-            let articles = [];
-            for (let count = 0; count < index.length; count++) {
-                articles.push(index[count]);
-            }
             res.status(200).send(articles);
         }
     } else {
