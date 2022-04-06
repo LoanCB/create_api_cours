@@ -14,12 +14,13 @@ const router = express.Router();
 
 // get all users
 router.get('/', (req, res) => {
-    let result = arrUsers.map(index => ({
-        "username": index["username"],
-        "mail": index["mail"],
-        "age": index["age"],
-        "active": index["active"],
-    }));
+    let result = arrUsers.map({username, mail, age, active, ...rest} => {username, mail, age, active});
+//     let result = arrUsers.map(user => ({
+//         "username": user["username"],
+//         "mail": user["mail"],
+//         "age": user["age"],
+//         "active": user["active"],
+//     }));
     res.status(200).send(result);
 });
 
