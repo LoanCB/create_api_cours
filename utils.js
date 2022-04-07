@@ -12,7 +12,9 @@ export function find_user(username) {
             value.data = `No username named ${username}`;
         } else {
             value.status_code = 200;
-            value.data = arrUsers[index];
+            let user = arrUsers[index];
+            delete user.password
+            value.data = user;
         }
     } else {
         value.status_code = 400;
