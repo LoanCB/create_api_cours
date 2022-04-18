@@ -20,7 +20,11 @@ router.get('/', (req, res) => {
         "age": user.age,
         "active": user.active,
     }));
-    res.status(200).send(result);
+    if (result) {
+        res.status(200).send(result);
+    } else {
+        res.status(500).send("Internal server error");
+    }
 });
 
 // get a user
@@ -78,13 +82,13 @@ router.delete('/username', (req, res) => {
 // edit user
 router.patch('/username', (req, res) => {
     let params = req.query;
-    if (typeof params.username === 'undefined' && typeof params.mail === 'undefined' && typeof params.age === 'undefined' && typeof params.active === 'undefined' && typeof params.password === 'undefined') {
+    if (typeof params.name === 'undefined' && typeof params.mail === 'undefined' && typeof params.age === 'undefined' && typeof params.active === 'undefined' && typeof params.password === 'undefined') {
         res.status(400).send("Need a parameter for update a user");
     } else {
-        let user = find_user(params.find_username);
+        let user = find_user(params.username);
         if (user.status_code === 200 ) {
-            if (params.username) {
-                user.data.username = params.username;
+            if (params.name) {
+                user.data.username = params.name;
             }
             if (params.mail) {
                 user.data.mail = params.mail;
@@ -105,7 +109,7 @@ router.patch('/username', (req, res) => {
                     }
                 });
             }
-            res.status(user.status_code).send(`User ${params.find_username} updated`);
+            res.status(user.status_code).send(`User ${params.username} updated`);
         } else {
             res.status(user.status_code).send(user.data);
         }

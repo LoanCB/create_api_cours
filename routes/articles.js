@@ -84,14 +84,14 @@ router.delete('/title', (req, res) => {
 // edit an article
 router.patch('/title', (req, res) => {
     let params = req.query;
-    if (typeof params.author === 'undefined' && typeof params.title === 'undefined' && typeof params.content === 'undefined' && typeof params.published === 'undefined') {
+    if (typeof params.author === 'undefined' && typeof params.name === 'undefined' && typeof params.content === 'undefined' && typeof params.published === 'undefined') {
         res.status(400).send("Need a parameter for update an article");
     } else {
-        if (params.find_title) {
+        if (params.title) {
             let done = true;
-            let index = arrArticles.findIndex(article => article.title === params.find_title);
+            let index = arrArticles.findIndex(article => article.title === params.title);
             if (index === -1) {
-                res.status(404).send(`No article with title "${params.find_title}"`);
+                res.status(404).send(`No article with title "${params.title}"`);
             } else {
                 if (params.author) {
                     let userIndex = arrUsers.findIndex(user => user.username === params.author);
@@ -103,8 +103,8 @@ router.patch('/title', (req, res) => {
                     }
                 }
                 if (done) {
-                    if (params.title) {
-                        arrArticles[index].title = params.title;
+                    if (params.name) {
+                        arrArticles[index].title = params.name;
                     }
                     if (params.content) {
                         arrArticles[index].content = params.content;
@@ -117,7 +117,7 @@ router.patch('/title', (req, res) => {
                         }
                         arrArticles[index].published = params.published;
                     }
-                    res.status(200).send(`Article "${params.find_title}" updated`);
+                    res.status(200).send(`Article "${params.title}" updated`);
                 }
             }
         } else {
