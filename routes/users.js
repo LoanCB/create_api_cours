@@ -159,7 +159,9 @@ router.get('/username/articles', (req, res) => {
         let articles = [];
         for (let count = 0; count < arrArticles.length; count++) {
             if (arrArticles[count].author.username === params.username) {
-                articles.push(arrArticles[count]);
+                let article = arrArticles[count];
+                delete article.author.password;
+                articles.push(article);
             }
         }
         if (articles.length === 0) {
