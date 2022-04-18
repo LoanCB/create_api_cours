@@ -3,9 +3,23 @@
   "version": "1.0.0",
   "description": "cours création d'une api",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "keywords": [
+    "Api",
+    "nodejs"
+  ],
+  "author": "Patais",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.15",
+    "swagger-ui-express": "^4.3.0"
+  }
 }

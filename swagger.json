@@ -1,0 +1,529 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Documentation de l'API",
+    "description": "Documentation permettant la compréhention de l'API",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "users",
+      "description": "Partie utilisateur de l'API"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Liste des utilisateurs",
+        "description": "Retourne la liste de l'ensemble des utilisateurs exepté leur mot-de-passe",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "500": {
+            "description": "Erreur interne dans le serveur"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Ajouter un utilisateur",
+        "description": "Permet l'ajout d'un utilisateur en rentrant l'ensemble de ses données",
+        "operationId": "postUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "type": "string",
+            "name": "username",
+            "description": "Pseudo de l'utilisateur",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "mail",
+            "description": "Mail de l'utilisateur",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "age",
+            "description": "Age de l'utilisateur",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "boolean",
+            "name": "active",
+            "description": "Etat de lu'itlisateur (actif ou non)",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "password",
+            "description": "Mot-de-passe de l'utilisateur en clair",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Utilisateur créé"
+          },
+          "400": {
+            "description": "Il y a une erreur dans les arguments donnés"
+          },
+          "500": {
+            "description": "Une erreur s'est produite lors du hashage du mot-de-passe"
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Récupérer un utilisateur via son username",
+        "description": "Retourne un objet json contenant les informations de l'utilisateur s'il existe excepté son mot-de-passe",
+        "operationId": "getOneUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "username",
+            "description": "Pseudo de l'utilisateur",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilisateur récupéré"
+          },
+          "400": {
+            "description": "Paramètre incorrect"
+          },
+          "404": {
+            "description": "Utilisateur introuvable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Supprimer un utilisateur via son username",
+        "operationId": "DeleteUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "username",
+            "description": "Pseudo de l'utilisateur",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilisateur supprimé"
+          },
+          "400": {
+            "description": "Paramètre incorrect"
+          },
+          "404": {
+            "description": "Utilisateur introuvable"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Modifier un utilisateur via son username",
+        "description": "Paramètre \"username\" nécessaire pour trouver l'utilisateur. Il faut au moins un paramètre à modifier. Pour modifier le username, il faut le faire passer dans la variable \"name\"",
+        "operationId": "patchUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "username",
+            "description": "Nom d'utilisateur pour le trouver",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "name",
+            "description": "Pseudo de l'utilisateur",
+            "required": false
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "mail",
+            "description": "Mail de l'utilisateur",
+            "required": false
+          },
+          {
+            "in": "query",
+            "type": "integer",
+            "name": "age",
+            "description": "Age de l'utilisateur",
+            "required": false
+          },
+          {
+            "in": "query",
+            "type": "boolean",
+            "name": "active",
+            "description": "Etat de lu'itlisateur (actif ou non)",
+            "required": false
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "password",
+            "description": "Mot-de-passe de l'utilisateur en clair",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilisateur mis à jour"
+          },
+          "404": {
+            "description": "Utilisateur introuvable"
+          },
+          "500": {
+            "description": "Erreur lors du hashage du mot-de-passe"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Se connecter",
+        "description": "Permet de se connecter avec son compte pour accéder à son token d'authentification. Chaque token a une durée de vie de 3 heures !",
+        "operationId": "PostLogin",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "type": "string",
+            "name": "username",
+            "description": "Nom d'utilisateur",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "password",
+            "description": "Mot-de-passe",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vous êtes connecté"
+          },
+          "400": {
+            "description": "Il y a une erreur dans les arguments donnés"
+          },
+          "500": {
+            "description": "Une erreur s'est produite lors du hashage du mot-de-passe"
+          }
+        }
+      }
+    },
+    "/users/{username}/article": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Recuperer l'ensemble des articles d'un utilisateur",
+        "operationId": "getUserArticle",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "username",
+            "description": "Nom d'utilisateur",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Articles retournés"
+          },
+          "400": {
+            "description": "Il y a une erreur dans les arguments donnés"
+          },
+          "404": {
+            "description": "Aucuns articles n'est associés à cet utilisateur"
+          }
+        }
+      }
+    },
+    "/articles": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Récupérer l'ensemble des articles",
+        "operationId": "getArticle",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "L'ensemble des articles est retourné"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Ajouter un article",
+        "description": "Afin d'ajouter un article, votre token doit être renseigné et valide",
+        "operationId": "postArticle",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "type": "string",
+            "name": "author",
+            "description": "Pseudo de l'autheur (utilisateur)",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "title",
+            "description": "Titre de l'article",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "content",
+            "description": "Contenue de l'article",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "boolean",
+            "name": "published",
+            "description": "Etat si l'article est publié ou non",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "publicationDate",
+            "description": "date de publication si l'article est publié",
+            "required": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Article créé"
+          },
+          "400": {
+            "description": "Erreur dans la saisie des paramètres | Token invalide"
+          },
+          "401": {
+            "description": "Aucun token renseigné"
+          },
+          "404": {
+            "description": "Autheur (utilisateur) introuvable"
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      }
+    },
+    "/article/{title}": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Récupérer un article via son titre",
+        "operationId": "getArticleByTitle",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "title",
+            "description": "Titre de l'article",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retourne l'article"
+          },
+          "400": {
+            "description": "Erreur dans la saisie des paramètres"
+          },
+          "404": {
+            "description": "Article introuvable"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Supprimer un article via son titre",
+        "description": "Afin de supprimer un article, votre token doit être renseigné et valide",
+        "operationId": "deleteArticle",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "title",
+            "description": "Titre de l'article à supprimer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Article supprimé"
+          },
+          "400": {
+            "description": "Erreur dans la saisie des paramètres"
+          },
+          "404": {
+            "description": "Article introuvable"
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Modifier un article via son titre",
+        "description": "Afin de modifier un article, votre token doit être renseigné et valide",
+        "operationId": "patchArticle",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "title",
+            "description": "Titre de l'article à modifier",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "author",
+            "description": "Pseudo de l'autheur (utilisateur)",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "name",
+            "description": "Nouveau titre de l'article",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "string",
+            "name": "content",
+            "description": "Contenue de l'article",
+            "required": true
+          },
+          {
+            "in": "query",
+            "type": "boolean",
+            "name": "published",
+            "description": "Etat si l'article est publié ou non",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Article modifié"
+          },
+          "400": {
+            "description": "Erreur dans la saisie des paramètres | Token invalide"
+          },
+          "401": {
+            "description": "Aucun token renseigné"
+          },
+          "404": {
+            "description": "Autheur (utilisateur) introuvable | Article introuvalbe"
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_token": {
+      "type": "apiKey",
+      "name": "api_token",
+      "in": "header"
+    }
+  }
+}
